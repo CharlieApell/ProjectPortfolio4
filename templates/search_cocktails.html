@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 mt-3 offset-md-2">
+        {% if searched %}
+            <h3>You Searched For {{ searched }}</h3>
+            <br/>
+            {% for cocktail in cocktails %}
+                <a href="{% url 'post_detail' cocktail.slug %}">{{ cocktail }}</a><br/>
+            {% endfor %}
+        
+        {% else %}
+
+            <h3>Hey! You Forgot To Search For A Cocktail...</h3>
+        {% endif %}
+        </div>
+    </div>
+</div>
+{%endblock%}

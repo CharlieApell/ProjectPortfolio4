@@ -3,6 +3,15 @@ from django.views import generic, View
 from django.http import HttpResponseRedirect
 from .models import Post
 from .forms import CommentForm
+from django.urls import reverse
+
+def search_cocktails(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+        cocktails = Post.objects.filter(content__contains=searched)
+        return render(request, '../templates/search_cocktails.html', {'searched':searched, 'cocktails':cocktails})
+    else:
+        return render(request, '../templates/search_cocktails.html', {})
 
 
 class PostList(generic.ListView):
@@ -30,7 +39,7 @@ class PostDetail(View):
                 "comments": comments,
                 "commented": False,
                 "liked": liked,
-                "comment_form": CommentForm()
+                "comment_form": CommentForm(),
             },
         )
     
