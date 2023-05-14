@@ -1,15 +1,22 @@
 from django.shortcuts import render, get_object_or_404, reverse
+from django.contrib.postgres.search import SearchQuery, SearchVector, SearchHeadline
 from django.views import generic, View
 from django.http import HttpResponseRedirect
+from django.db.models import Q
 from .models import Post
 from .forms import CommentForm
-from django.urls import reverse
 
 def search_cocktails(request):
     if request.method == "POST":
-        searched = request.POST['searched']
-        cocktails = Post.objects.filter(content__contains=searched)
-        return render(request, '../templates/search_cocktails.html', {'searched':searched, 'cocktails':cocktails})
+        q = request.POST['q']
+        vector = SearchVector('title', 'content')
+        query = SearchQuery(q)
+        search_headline = SearchHeadline('content', query)
+
+        cocktails = Post.objects.annotate(search=vector).annotate(headline=search_headline).filter(search=query)
+        
+        return render(request, '../templates/search_cocktails.html'
+        , {'q': q, 'cocktails': cocktails})
     else:
         return render(request, '../templates/search_cocktails.html', {})
 
