@@ -4,12 +4,9 @@
 <html class="h-100">
 
 <head>
-    <title>Gentlemans Cocktail Club</title>
+    <title>The Gentleman's Cocktail Club</title>
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
 
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -27,17 +24,20 @@
 
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'home' %}"><span class="brand">Gentlemans Cocktail Club</span></a>
+            <a class="navbar-brand" href="{% url 'home' %}"><span class="brand">The Gentleman's Cocktail Club</span></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
                 aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarText">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav me-auto mb-1 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
+                        <a class="nav-link" aria-current="page" href="{% url 'home' %}">Home</a>
                     </li>
                     {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'socialaccount_connections' %}">Edit Profile</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
                     </li>
@@ -86,6 +86,14 @@
             <i class="fab fa-instagram-square ms-3"></i>
             <i class="fab fa-youtube-square ms-3"></i></p>
     </footer>
+    <script>
+        setTimeout(function () {
+            let messages = document.getElementById('msg');
+            let alert = new bootstrap.Alert(messages);
+            alert.close();
+        }, 2000);
+    </script>
+
 </body>
 
 </html>

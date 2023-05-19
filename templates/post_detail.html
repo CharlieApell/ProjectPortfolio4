@@ -96,16 +96,26 @@
             <div class="card-body">
                 <!-- For later -->
                 {% if commented %}
-                <div class="alert alert-success" role="alert">
+                <div class="alert alert-success alert-dismissible fade show" id="msg" role="alert">
                     Your comment is awaiting approval
+                </div>
+                <h3>Leave a comment:</h3>
+                <p>Posting as: {{ user.username }}</p>
+                <form method="post" style="margin-top: 1.3em">
+                    {{ comment_form | crispy }}
+                    <!-- Against forgery: -->
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-signup btn-lg">Submit</button>
+                </form>
                 </div>
                 {% else %}
                 {% if user.is_authenticated %}
 
                 <h3>Leave a comment:</h3>
                 <p>Posting as: {{ user.username }}</p>
-                <form method="post" style="margin-top: 1.3em;">
+                <form method="post" style="margin-top: 1.3em">
                     {{ comment_form | crispy }}
+                    <!-- Against forgery: -->
                     {% csrf_token %}
                     <button type="submit" class="btn btn-signup btn-lg">Submit</button>
                 </form>
