@@ -49,3 +49,11 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment {self.body} by {self.name}"
+
+
+class DeletedAccount(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    deleted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username

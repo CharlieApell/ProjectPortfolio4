@@ -6,6 +6,21 @@ from django.db.models import Q
 from .models import Post
 from .forms import CommentForm
 
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, render
+from allauth.account.views import LogoutView
+
+@login_required
+def delete_account(request):
+    if request.method == 'POST':
+        user = request.user
+        user.delete()
+        return redirect('account_logout')
+    else:
+        return render(request, 'delete_account.html')
+
+
 def search_cocktails(request):
     if request.method == "POST":
         q = request.POST['q']
@@ -29,6 +44,7 @@ class PostList(generic.ListView):
 
 
 class PostDetail(View):
+    
 
     def get(self, request, slug, *args, **kwargs):
         queryset = Post.objects.filter(status=1)

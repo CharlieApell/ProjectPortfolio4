@@ -36,10 +36,10 @@
                     </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'socialaccount_connections' %}">Edit Profile</a>
+                        <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
+                        <a class="nav-link" href="{% url 'delete_account' %}">Delete Account</a>
                     </li>
                     {% else %}
                     <li class="nav-item">
