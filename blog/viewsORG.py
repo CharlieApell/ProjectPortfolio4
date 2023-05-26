@@ -47,7 +47,7 @@ class PostDetail(View):
         post = get_object_or_404(queryset, slug=slug)
         comments = post.comments.filter(approved=True).order_by("-created_on")
         liked = False
-        if post.likes.filter(id=request.user.id).exists():
+        if post.likes.filter(id=self.request.user.id).exists():
             liked = True
 
         return render(
@@ -96,7 +96,7 @@ class PostDetail(View):
 
 
 @login_required
-def delete_comment(request, slug, comment_id):
+def delete_comment(self, request, slug, comment_id):
     comment = get_object_or_404(Comment, id=comment_id, user=request.user)
     if request.method == 'POST':
         comment.delete()
@@ -105,27 +105,18 @@ def delete_comment(request, slug, comment_id):
 
 
 @login_required
-def like_comment(request, comment_id, *args, **kwargs):
-    comment = get_object_or_404(Comment, id=comment_id)
-    like, created = CommentLike.objects.get_or_create(comment=comment, user=request.user)
+def like_comment(self, request, comment_id, *args, **kwargs):
+    comment = get_object_or_404(Comment, id=comment_id)  # Hämta kommentaren
+    comment_like, created = CommentLike.objects.get_or_create(comment=comment)  # Skapa eller hämta CommentLike-instansen baserat på kommentaren
 
-    if not created:
-        # Användaren har redan gillat kommentaren, ta bort gillningen
-        like.delete()
+    if comment_like.likes.filter(id=request.user.id).exists():
+        comment_like.likes.remove(request.user)
+    else:
+        comment_like.likes.add(request.user)
+    
+    comment_like.save()
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-
-# @login_required
-# def like_comment(request, comment_id, *args, **kwargs):
-#     comment = get_object_or_404(Comment, id=comment_id)
-#     like, created = Like.objects.get_or_create(comment=comment, user=request.user)
-
-#     if not created:
-#         # Användaren har redan gillat kommentaren, ta bort gillningen
-#         like.delete()
-
-#     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 class PostLike(View):

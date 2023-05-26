@@ -71,61 +71,61 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-8 card mb-4 mt-3">
+        <div class="col-md-8 card mb-4  mt-3 ">
             <h3>Comments:</h3>
             <div class="card-body">
                 {% for comment in comments %}
                 <div class="comments" style="padding: 10px;">
                     <p class="font-weight-bold">
                         {{ comment.name }}
-                        <span class="text-muted font-weight-normal">
+                        <span class=" text-muted font-weight-normal">
                             {{ comment.created_on }}
                         </span> wrote:
                     </p>
                     {{ comment.body | linebreaks }}
-                
-                    <div>
-                        <form class="d-inline" action="{% url 'like_comment' comment.id %}" method="POST">
-                            {% csrf_token %}
-                            {% if comment.liked_by_user %}
-                                <button type="submit" name="comment_id" value="{{ comment.id }}" class="btn-like"><i class="fas fa-heart"></i></button>
-                            {% else %}
-                                <button type="submit" name="comment_id" value="{{ comment.id }}" class="btn-like"><i class="far fa-heart"></i></button>
-                            {% endif %}
-                        </form>
-                        <span class="text-secondary">{{ comment.number_of_likes }}</span>
-                    </div>
-                
-                    {% if comment.user == request.user %}
-                        <form action="{% url 'comment_delete' comment.id %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit">Radera</button>
-                        </form>
-                    {% endif %}
-                </div>                
-            {% endfor %}
+                </div>
+                {% endfor %}
             </div>
         </div>
-
-        <div class="col-md-4 card mb-4 mt-3">
+        <div class="col-md-4 card mb-4  mt-3 ">
             <div class="card-body">
                 {% if commented %}
                 <div class="alert alert-success alert-dismissible fade show" id="msg" role="alert">
                     Your comment is awaiting approval
                 </div>
-                {% endif %}
                 <h3>Leave a comment:</h3>
-                {% if user.is_authenticated %}
                 <p>Posting as: {{ user.username }}</p>
                 <form method="post" style="margin-top: 1.3em">
                     {{ comment_form | crispy }}
                     {% csrf_token %}
                     <button type="submit" class="btn btn-signup btn-lg">Submit</button>
                 </form>
+                </div>
                 {% else %}
-                <p>You need to be logged in to leave a comment.</p>
-                <a href="{% url 'account_login' %}" class="btn btn-signup btn-lg">Log in</a>
+                {% if user.is_authenticated %}
+
+                <h3>Leave a comment:</h3>
+                <p>Posting as: {{ user.username }}</p>
+                <form method="post" style="margin-top: 1.3em">
+                    {{ comment_form | crispy }}
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-signup btn-lg">Submit</button>
+                </form>
                 {% endif %}
+                {% endif %}
+
+                {% for comment in comments %}
+                <div class="comment">
+                    <p>{{ comment.body }}</p>
+                    <small>Skapad av: {{ comment.user.username }}</small>
+                    {% if comment.user == request.user %}
+                        <form action="{% url 'comment_delete' comment.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit">Radera</button>
+                        </form>
+                    {% endif %}
+                    <form action="{% url 'comment_like' comment.id %}" method="post">
+                        {% csrf_token %}
             </div>
         </div>
     </div>
