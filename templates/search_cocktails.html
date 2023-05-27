@@ -7,18 +7,21 @@
     <div class="row">
         <div class="col-md-8 mt-3 offset-md-2">
         {% if q %}
+            <!-- Display search results -->
             <h3>You Searched For {{ q }}</h3>
             {% if cocktails %}
+            <!-- Display number of results -->
             Results: {{ cocktails|length }}
             <br/>
             <br/>
+            <!-- Loop through each cocktail and display details -->
             {% for cocktail in cocktails %}
                 <a href="{% url 'post_detail' cocktail.slug %}">{{ cocktail }}</a><br/>
                 {{ cocktail.headline|safe }}<br/><br/>
             {% endfor %}
             {% endif %}
         {% else %}
-
+            <!-- No search query provided -->
             <h3>Hey! You Forgot To Search For A Cocktail...</h3>
         {% endif %}
         </div>

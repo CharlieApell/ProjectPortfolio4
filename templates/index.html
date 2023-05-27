@@ -1,62 +1,72 @@
 {% extends "base.html" %}
 
 {% block content %}
+<!-- This is the content block that extends the "base.html" template -->
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-12 mt-3 mb-3 left">
             <div class="row">
                 {% for post in post_list %}
+                <!-- Looping over each post in the post_list -->
                 <div class="col-md-4">
                     <div class="col-mb-4">
                         <div class="card-body">
                             <div class="image-container">
                                 {% if "placeholder" in post.featured_image.url %}
+                                <!-- Checking if the post's featured_image URL contains "placeholder" -->
                                 <a href="{% url 'post_detail' post.slug %}">
-                                <img class="card-img-top"
-                                    src="https://cdn-icons-png.flaticon.com/512/4474/4474385.png">
+                                    <img class="card-img-top" src="https://cdn-icons-png.flaticon.com/512/4474/4474385.png">
                                 </a>
                                 {% else %}
+                                <!-- Otherwise the uploaded picture will be shown -->
                                 <a href="{% url 'post_detail' post.slug %}">
-                                <img class="card-img-top" src=" {{ post.featured_image.url }}">
+                                    <img class="card-img-top" src="{{ post.featured_image.url }}">
                                 </a>
                                 {% endif %}
                             </div>
                             <a href="{% url 'post_detail' post.slug %}" class="post-link">
+                                <!-- Link to the post detail page -->
                                 <h2 class="card-title">{{ post.title }}</h2>
                                 <p class="card-text">{{ post.excerpt }}</p>
                             </a>
                             <hr/>
+                            <!-- showing number of likes and comments -->
                             <p class="card-text text-muted h6">
                                 <i class="far fa-heart"></i>
                                 {{ post.number_of_likes }}
                                 <i class="far fa-comments"></i>
-                                {{ post.number_of_comments }}            
+                                {{ post.number_of_comments }}
                             </p>
                         </div>
                     </div>
                 </div>
                 {% if forloop.counter|divisibleby:3 %}
+                <!-- Checking if the loop counter is divisible by 3 -->
             </div>
             <div class="row">
                 {% endif %}
                 {% endfor %}
-
+                <!-- End of the for loop -->
             </div>
         </div>
     </div>
+
     {% if is_paginated %}
+    <!-- Checking if pagination is enabled -->
     <nav aria-label="Page navigation">
         <ul class="pagination justify-content-center">
             {% if page_obj.has_previous %}
+            <!-- Checking if there is a previous page -->
             <li><a href="?page={{ page_obj.previous_page_number }}" class="page-link">&laquo; PREV </a></li>
             {% endif %}
             {% if page_obj.has_next %}
+            <!-- Checking if there is a next page -->
             <li><a href="?page={{ page_obj.next_page_number }}" class="page-link"> NEXT &raquo;</a></li>
-
             {% endif %}
         </ul>
     </nav>
     {% endif %}
 </div>
-{%endblock%}
+{% endblock %}
+<!-- End of the content block -->

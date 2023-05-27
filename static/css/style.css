@@ -114,6 +114,15 @@ body {
     text-decoration: none;
 }
 
+#delete_link {
+    color: #b20000;
+    text-decoration: none;
+}
+
+#delete_link:hover {
+    color: #ff6f00;
+}
+
 .link:hover,
 .link:active {
     color: #4d4d4d;

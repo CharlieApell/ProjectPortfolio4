@@ -39,7 +39,7 @@
                         <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'delete_account' %}">Delete Account</a>
+                        <a class="nav-link" id="delete_link" href="{% url 'delete_account' %}">Delete Account</a>
                     </li>
                     {% else %}
                     <li class="nav-item">
@@ -58,7 +58,7 @@
             </div>
         </div>
     </nav>
-
+<!-- Alert messages -->
     <div class="container">
         <div class="row">
             <div class="col-md-8 offset-md-2">
@@ -88,6 +88,7 @@
             <a href="http://www.youtube.com" target="_blank" class="link-light"><i class="fa-brands fa-youtube ms-3"></i></a>
         </p>
     </footer>
+    <!-- JavaScript for the messages to automatically close -->
     <script>
         setTimeout(function () {
             let messages = document.getElementById('msg');

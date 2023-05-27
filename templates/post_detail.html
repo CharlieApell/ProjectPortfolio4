@@ -1,20 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<!-- This is the content block that extends the "base.html" template -->
 
 {% load crispy_forms_tags %}
+<!-- Loading crispy_forms_tags to use crispy forms -->
 
 <div class="masthead">
     <div class="container">
         <div class="row g-0">
             <div class="col-md-6 masthead-text">
+                <!-- Displaying the post title -->
                 <h1 class="post-title">{{ post.title }}</h1>
             </div>
             <div class="d-md-block col-md-6 masthead-image">
                 {% if "placeholder" in post.featured_image.url %}
+                <!-- Checking if the post's featured_image URL contains "placeholder" -->
                 <img src="https://cdn-icons-png.flaticon.com/512/4474/4474385.png" width="100%">
                 {% else %}
-                <img src=" {{ post.featured_image.url }}" width="100%">
+                <img src="{{ post.featured_image.url }}" width="100%">
                 {% endif %}
             </div>
         </div>
@@ -23,31 +27,37 @@
 
 <div class="container">
     <div class="row">
-        <div class="col card mb-4  mt-3 left  top">
+        <div class="col card mb-4 mt-3 left top">
             <div class="card-body">
-                <p class="card-text ">
+                <p class="card-text">
                     {{ post.content | safe }}
+                    <!-- Displaying the post content safely -->
                 </p>
                 <div class="row">
                     <div class="col-1">
                         <strong>
                             {% if user.is_authenticated %}
+                            <!-- Checking if the user is authenticated -->
                             <form class="d-inline" action="{% url 'post_like' post.slug %}" method="POST">
                                 {% csrf_token %}
                                 {% if liked %}
+                                <!-- Checking if the post is liked or not by the user with a heart -->
                                 <button type="submit" name="blogpost_id" value="{{post.slug}}" class="btn-like"><i class="fas fa-heart"></i></button>
                                 {% else %}
                                 <button type="submit" name="blogpost_id" value="{{post.slug}}" class="btn-like"><i class="far fa-heart"></i></button>
                                 {% endif %}
                             </form>
                             {% else %}
+                            <!-- If user not authenticated an empty heart will be shown -->
                             <span class="text-secondary"><i class="far fa-heart"></i></span>
                             {% endif %}
-                        <span class="text-secondary">{{ post.number_of_likes }} </span>
+                            <!-- Posting number of likes on post -->
+                            <span class="text-secondary">{{ post.number_of_likes }}</span>
                         </strong>
                     </div>
                     <div class="col-1">
                         {% with comments.count as total_comments %}
+                        <!-- Counting the total number of comments -->
                         <strong class="text-secondary"><i class="far fa-comments"></i>
                             {{ total_comments }}</strong>
                         {% endwith %}
@@ -56,79 +66,100 @@
             </div>
         </div>
     </div>
+
     <div class="container">
         <div class="row">
-            <div class="col card mb-2  mt-2">
-    {% load social_share %}
-
-    {% post_to_facebook object_or_url "Share to Facebook" %}
+            <div class="col card mb-2 mt-2">
+                {% load social_share %}
+                <!-- Loading social_share to use social sharing buttons -->
+                {% post_to_facebook object_or_url "Share to Facebook" %}
+                <!-- Creating a Facebook sharing button for the post -->
             </div>
         </div>
     </div>
+
     <div class="row">
         <div class="col">
             <hr>
+            <!-- Horizontal line -->
         </div>
     </div>
+
     <div class="row">
         <div class="col-md-8 card mb-4 mt-3">
             <h3>Comments:</h3>
+            <!-- Heading for comments section -->
             <div class="card-body">
                 {% for comment in comments %}
+                <!-- Looping over each comment in the comments list -->
                 <div class="comments" style="padding: 10px;">
                     <p class="font-weight-bold">
-                        {{ comment.name }}
+                        {{ comment.user.username }}
+                        <!-- Displaying the username of the comment author -->
                         <span class="text-muted font-weight-normal">
                             {{ comment.created_on }}
+                            <!-- Displaying the comment's creation date -->
                         </span> wrote:
                     </p>
                     {{ comment.body | linebreaks }}
-                    
+                    <!-- Displaying the comment's body with line breaks -->
+
                     <div>
+                        {% if user.is_authenticated %}
+                        <!-- Checking if the user is authenticated -->
                         <form class="d-inline" action="{% url 'like_comment' comment.id %}" method="POST">
                             {% csrf_token %}
-                            {% if comment.liked_by_user %}
-                                <button type="submit" name="comment_id" value="{{ comment.id }}" class="btn-like"><i class="fas fa-heart"></i></button>
+                            {% if comment.liked %}
+                            <!-- Checking if the comment is liked by the user -->
+                            <button type="submit" name="comment_id" value="{{ comment.id }}" class="btn-like"><i class="fas fa-heart"></i></button>
                             {% else %}
-                                <button type="submit" name="comment_id" value="{{ comment.id }}" class="btn-like"><i class="far fa-heart"></i></button>
+                            <button type="submit" name="comment_id" value="{{ comment.id }}" class="btn-like"><i class="far fa-heart"></i></button>
                             {% endif %}
                         </form>
+                        {% else %}
+                        <span class="text-secondary"><i class="far fa-heart"></i></span>
+                        {% endif %}
+                        <!-- Showing number of likes on the comments -->
                         <span class="text-secondary">{{ comment.number_of_likes }}</span>
                     </div>
-                    
+
                     {% if comment.user == request.user or request.user.is_superuser %}
-                        <div>
-                            <a href="{% url 'edit_comment' comment.id %}" class="btn btn-primary">Edit</a>
-                            <form action="{% url 'comment_delete' comment.id %}" method="post" class="d-inline">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </form>
-                        </div>
+                    <!-- Checking if the comment author is the current user or a superuser -->
+                    <div>
+                        <a href="{% url 'edit_comment' comment.id %}" class="btn btn-primary">Edit</a>
+                        <!-- Edit comment button -->
+                        <form action="{% url 'delete_comment' comment.id %}" method="post" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                            <!-- Delete comment button -->
+                        </form>
+                    </div>
                     {% endif %}
                 </div>
-            {% endfor %}
-                        
+                {% endfor %}
+                <!-- End of the comments loop -->
             </div>
         </div>
 
-        <div class="col-md-4 card mb-4 mt-3">
+        <div class="col-md-4 card mb-4 mt-3 ">
             <div class="card-body">
+                <!-- Checking if commented -->
                 {% if commented %}
-                <div class="alert alert-success alert-dismissible fade show" id="msg" role="alert">
-                    Your comment is awaiting approval
+                <div class="alert alert-success" role="alert">
+                    Your comment has been sent
                 </div>
-                {% endif %}
-                <h3>Leave a comment:</h3>
+                {% else %}
                 {% if user.is_authenticated %}
+                <!-- Checking if the user is authenticated -->
+                <h3>Leave a comment:</h3>
                 <p>Posting as: {{ user.username }}</p>
-                <form method="post" style="margin-top: 1.3em">
+                <form method="post" style="margin-top: 1.3em;">
                     {{ comment_form | crispy }}
+                    <!-- Displaying the comment form using crispy forms -->
                     {% csrf_token %}
                     <button type="submit" class="btn btn-signup btn-lg">Submit</button>
                 </form>
-                {% else %}
-                <p>You need to be logged in to leave a comment.</p>
-                <a href="{% url 'account_login' %}" class="btn btn-signup btn-lg">Log in</a>
+                {% endif %}
                 {% endif %}
             </div>
         </div>
@@ -136,3 +167,4 @@
 </div>
 
 {% endblock content %}
+<!-- End of the content block -->
