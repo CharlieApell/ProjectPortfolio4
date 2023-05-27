@@ -45,7 +45,7 @@ class PostDetail(View):
     def get(self, request, slug, *args, **kwargs):
         queryset = Post.objects.filter(status=1)
         post = get_object_or_404(queryset, slug=slug)
-        comments = post.comments.filter(approved=True).order_by("-created_on")
+        comments = post.comments.order_by("-created_on")
         liked = False
         if post.likes.filter(id=request.user.id).exists():
             liked = True
@@ -66,7 +66,7 @@ class PostDetail(View):
     def post(self, request, slug, *args, **kwargs):
         queryset = Post.objects.filter(status=1)
         post = get_object_or_404(queryset, slug=slug)
-        comments = post.comments.filter(approved=True).order_by("-created_on")
+        comments = post.comments.order_by("-created_on")
         liked = False
         if post.likes.filter(id=request.user.id).exists():
             liked = True
@@ -100,7 +100,7 @@ def delete_comment(request, slug, comment_id):
     comment = get_object_or_404(Comment, id=comment_id, user=request.user)
     if request.method == 'POST':
         comment.delete()
-        messages.success(request, 'Kommentaren har raderats.')
+        messages.success(request, 'The comment has been deleted.')
     return redirect('post_detail', slug=slug)
 
 
@@ -114,18 +114,6 @@ def like_comment(request, comment_id, *args, **kwargs):
         like.delete()
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-
-# @login_required
-# def like_comment(request, comment_id, *args, **kwargs):
-#     comment = get_object_or_404(Comment, id=comment_id)
-#     like, created = Like.objects.get_or_create(comment=comment, user=request.user)
-
-#     if not created:
-#         # Användaren har redan gillat kommentaren, ta bort gillningen
-#         like.delete()
-
-#     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 class PostLike(View):
@@ -143,9 +131,10 @@ class PostLike(View):
 class CommentDelete(View):
     def post(self, request, pk, *args, **kwargs):
         comment = get_object_or_404(Comment, pk=pk)
-        # Kontrollera om användaren har behörighet att radera kommentaren
-        if comment.user == request.user:
+        # Kontrollera om användaren är ägaren till kommentaren
+        if comment.is_owner(request.user):
             comment.delete()
+            messages.success(request, 'The comment has been deleted.')
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
@@ -158,3 +147,23 @@ class CommentLikeView(View):
             comment.likes.add(request.user)
         comment.save()
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required
+def edit_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    if not request.user.is_superuser and comment.id != request.user:
+        messages.error(request, 'You do not have permission to edit this comment.')
+        return redirect('post_detail', slug=comment.post.slug)
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'The comment has been updated.')
+            return redirect('post_detail', slug=comment.post.slug)
+    else:
+        form = CommentForm(instance=comment)
+
+    return render(request, 'edit_comment.html', {'form': form, 'slug': comment.post.slug, 'comment': comment})
+

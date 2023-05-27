@@ -83,7 +83,7 @@
                         </span> wrote:
                     </p>
                     {{ comment.body | linebreaks }}
-                
+                    
                     <div>
                         <form class="d-inline" action="{% url 'like_comment' comment.id %}" method="POST">
                             {% csrf_token %}
@@ -95,15 +95,19 @@
                         </form>
                         <span class="text-secondary">{{ comment.number_of_likes }}</span>
                     </div>
-                
-                    {% if comment.user == request.user %}
-                        <form action="{% url 'comment_delete' comment.id %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit">Radera</button>
-                        </form>
+                    
+                    {% if comment.user == request.user or request.user.is_superuser %}
+                        <div>
+                            <a href="{% url 'edit_comment' comment.id %}" class="btn btn-primary">Edit</a>
+                            <form action="{% url 'comment_delete' comment.id %}" method="post" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
                     {% endif %}
-                </div>                
+                </div>
             {% endfor %}
+                        
             </div>
         </div>
 

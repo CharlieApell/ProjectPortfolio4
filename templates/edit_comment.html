@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h2>Edit Comment</h2>
+            <form method="post" action="{% url 'edit_comment' comment.id %}">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <input type="hidden" name="slug" value="{{ slug }}">
+                <button type="submit">Spara ändringar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
