@@ -16,12 +16,12 @@
                                 {% if "placeholder" in post.featured_image.url %}
                                 <!-- Checking if the post's featured_image URL contains "placeholder" -->
                                 <a href="{% url 'post_detail' post.slug %}">
-                                    <img class="card-img-top" src="https://cdn-icons-png.flaticon.com/512/4474/4474385.png">
+                                    <img class="card-img-top" src="https://cdn-icons-png.flaticon.com/512/4474/4474385.png" alt="stock image of a drawn cocktail glass">
                                 </a>
                                 {% else %}
                                 <!-- Otherwise the uploaded picture will be shown -->
                                 <a href="{% url 'post_detail' post.slug %}">
-                                    <img class="card-img-top" src="{{ post.featured_image.url }}">
+                                    <img class="card-img-top" src="{{ post.featured_image.url }}" alt="Picture of cocktail">
                                 </a>
                                 {% endif %}
                             </div>
@@ -32,7 +32,7 @@
                             </a>
                             <hr/>
                             <!-- showing number of likes and comments -->
-                            <p class="card-text text-muted h6">
+                            <p class="card-text text-secondary h6">
                                 <i class="far fa-heart"></i>
                                 {{ post.number_of_likes }}
                                 <i class="far fa-comments"></i>

@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap');
 
 body {
-    background-color: #fff;
+    background-color: #fafafa;
 }
 
 .brand {
@@ -24,7 +24,7 @@ body {
 }
 
 .main-bg {
-    background-color: #f0f0f0;
+    background-color: #fafafa;
 }
 
 .card {
@@ -80,7 +80,7 @@ body {
 
 .post-link {
     text-decoration: none;
-    color: #4d4d4d;
+    color: #323232;
 }
 
 .post-link:hover,
@@ -110,7 +110,7 @@ body {
 }
 
 .link {
-    color: #4d4d4d;
+    color: #323232;
     text-decoration: none;
 }
 
@@ -121,11 +121,6 @@ body {
 
 #delete_link:hover {
     color: #ff6f00;
-}
-
-.link:hover,
-.link:active {
-    color: #4d4d4d;
     text-decoration: underline;
 }
 
@@ -135,13 +130,18 @@ body {
     background: transparent;
 }
 
-.btn-like:hover,
-.btn-like:active {
+.btn-like:hover {
     color: #E84610;
     background: transparent;
     border: none;
 }
 
+.navbar-light .navbar-nav .nav-link {
+    color: #4d4d4d;
+
+}
+
 .navbar-light .navbar-nav .nav-link:hover {
     color:#ff6f00;
+    text-decoration: underline;
 }
