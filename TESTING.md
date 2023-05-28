@@ -8,9 +8,15 @@
 
 ***
 ## Table of contents
-1. [Testing User Stories](#Testing-User-Stories)
-2. [Manual Testing](#Manual-Testing)
-3. [Automated Testing](#Automated-Testing) 
+- [Performance](#performance)
+  - [Google's Lighthouse Performance](#googles-lighthouse-performance)
+- [Code Validation](#code-validation)
+  - [HTML Validation](#html-validation)
+  - [CSS Validation](#css-validation)
+  - [PEP8 Validation](#pep8-validation)
+- [Testing User Stories](#Testing-User-Stories)
+- [Manual Testing](#Manual-Testing)
+- [Automated Testing](#Automated-Testing) 
      - [Code Validation](#Code-Validation)
      - [Browser Validation](#Browser-Validation)
 4. [User Testing](#User-Testing)
