@@ -1,5 +1,5 @@
-from django.shortcuts import render, get_object_or_404, reverse, redirect
-from django.contrib.postgres.search import SearchQuery, SearchVector, SearchHeadline
+from django.shortcuts import *
+from django.contrib.postgres.search import *
 from django.views import generic, View
 from django.http import HttpResponseRedirect
 from django.db.models import Q
@@ -8,6 +8,7 @@ from .forms import CommentForm
 from django.contrib.auth.decorators import login_required
 from allauth.account.views import LogoutView
 from django.contrib import messages
+
 
 @login_required
 def delete_account(request):
@@ -33,9 +34,11 @@ def search_cocktails(request):
         search_headline = SearchHeadline('content', query)
 
         # Perform the search using PostgreSQL full-text search features
-        cocktails = Post.objects.annotate(search=vector).annotate(headline=search_headline).filter(search=query)
+        cocktails = Post.objects.annotate(search=vector).annotate(
+            headline=search_headline).filter(search=query)
 
-        return render(request, 'search_cocktails.html', {'q': q, 'cocktails': cocktails})
+        return render(
+            request, 'search_cocktails.html', {'q': q, 'cocktails': cocktails})
     else:
         return render(request, 'search_cocktails.html', {})
 
@@ -116,7 +119,8 @@ def edit_comment(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
 
     if not request.user.is_superuser and request.user != comment.user:
-        messages.error(request, 'You do not have permission to edit this comment.')
+        messages.error(
+            request, 'You do not have permission to edit this comment.')
         return redirect('post_detail', slug=comment.post.slug)
 
     if request.method == 'POST':
@@ -128,7 +132,9 @@ def edit_comment(request, comment_id):
     else:
         form = CommentForm(instance=comment)
 
-    return render(request, 'edit_comment.html', {'form': form, 'slug': comment.post.slug, 'comment': comment})
+    return render(
+        request, 'edit_comment.html',
+        {'form': form, 'slug': comment.post.slug, 'comment': comment})
 
 
 @login_required
@@ -139,7 +145,8 @@ def delete_comment(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
 
     if not request.user.is_superuser and request.user != comment.user:
-        messages.error(request, 'You do not have permission to delete this comment.')
+        messages.error(
+            request, 'You do not have permission to delete this comment.')
         return redirect('post_detail', slug=comment.post.slug)
 
     if request.method == 'POST':
