@@ -262,13 +262,8 @@ Although the visual representation of the like status is not accurate, the funct
 In the future, I aim to resolve this issue and ensure that the heart icon accurately reflects the liking status of the comments.
 <br>
 
-**Issue** - Sometimes, during the deployment process of my website, I encounter an error message regarding "etag" that prevents successful deployment.
-<br>
-However, I have noticed that if I try again after some time, the deployment usually works without any issues.
-<br>
-Regrettably, due to time constraints, I am unable to dedicate the necessary time to troubleshoot and resolve the "etag" error at the moment.
-<br>
-In the future, when I have more available time, I plan to thoroughly investigate and address this issue to ensure smoother deployments.
+**Issue** -Sometimes, during the deployment process of my website, I encounter an error message regarding "etag" that prevents successful deployment.<br>
+This issue has led to multiple similar commits in the repository as I attempt to resolve the error. However, I have noticed that if I try again after some time, the deployment usually works without any issues.<br> Regrettably, due to time constraints, I am unable to dedicate the necessary time to troubleshoot and resolve the "etag" error at the moment. In the future, when I have more available time, I plan to thoroughly investigate and address this issue to ensure smoother deployments.
 ![Heroku Deployment Issue](assets/testing/error-heroku.png 'Heroku Deployment Issue')
 
 [Back to top ⇧](#the-simple-man-spirits)
