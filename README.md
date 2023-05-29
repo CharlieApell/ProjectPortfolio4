@@ -306,7 +306,8 @@ This issue has led to multiple similar commits in the repository as I attempt to
 - [Lucidchart](https://lucid.app/ "Link to Lucidchart")
      - Lucidchart was used to make the flowchart and database schema.
 
-[Back to top ⇧](#the-simple-man-spirits
+[Back to top ⇧](#the-simple-man-spirits)
+
 ***
 ## Testing
 
